@@ -1,0 +1,39 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #E97A54;">
+  <a href="{% url 'erp:dashboard' %}" class="brand-link">
+    <img src="{% static 'img/logo.png' %}" alt="MACTECH Logo" class="brand-image elevation-3" />
+    <span class="brand-text font-weight-light" style="color: black;">
+      Inventario</span>
+  </a>
+  <div class="sidebar">
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="{% static 'img/empty.png' %}" class="img-circle" alt="User Image" />
+      </div>
+      <div class="info">
+        <a href="" class="d-block" style="color: black;">{{ request.user.username }}</a>
+      </div>
+    </div>
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" >
+        <li class="nav-header" style="color:black">Módulos </li>
+        <li class="nav-item">
+          <a href="{% url 'erp:category_list' %}" class="nav-link"  style="color:black">
+            <i class="nav-icon fas fa-truck-loading"></i>
+            <p>Categorías</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{% url 'erp:replacement_list' %}" class="nav-link"  style="color:black">
+            <i class="nav-icon fas fa-boxes"></i>
+            <p>Repuestos</p>
+          </a>
+        </li>
+
+
+
+      </ul>
+    </nav>
+  </div>
+</aside>
