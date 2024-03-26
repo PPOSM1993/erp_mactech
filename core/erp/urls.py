@@ -1,8 +1,13 @@
 from django.urls import path
 
 from core.erp.views.category.views import *
+
 from core.erp.views.replacement.views import *
+
+from core.erp.views.client.views import *
+
 from core.erp.views.dashboard.views import DashboardView
+
 
 app_name = 'erp'
 
@@ -20,4 +25,10 @@ urlpatterns = [
     path('replacement/delete/<int:pk>/', ReplacementDeleteView.as_view(), name="replacement_delete"),
     
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    
+    #Customer
+    path('client/list/', ClientListView.as_view(), name="client_list"),
+    path('client/add/', ClientCreateView.as_view(), name="client_create"),
+    path('client/update/<int:pk>/', ClientUpdateView.as_view(), name="client_update"),
+    path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name="client_delete"),
 ]

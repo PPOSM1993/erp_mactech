@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from core.erp.mixins import IsSuperUserMixin
 from core.erp.models import *
 from django.views.generic import *
 from django.utils.decorators import method_decorator
@@ -11,13 +12,13 @@ from core.erp.forms import CategoryForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class CategoryListView(LoginRequiredMixin, ListView):
+class CategoryListView(LoginRequiredMixin, IsSuperUserMixin, ListView):
     model = Category 
     template_name = "category/list.html"
     
     
     @method_decorator(csrf_exempt)
-    @method_decorator(login_required)
+    #@method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     
@@ -47,7 +48,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
         context['entity'] = 'Categorias'
         return context
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = "category/create.html"
@@ -79,7 +80,7 @@ class CategoryCreateView(CreateView):
         context['action'] = 'add'
         return context
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     
     model = Category
     form_class = CategoryForm
@@ -114,7 +115,7 @@ class CategoryUpdateView(UpdateView):
         context['action'] = 'edit'
         return context
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
     template_name = "category/delete.html"
     success_url = reverse_lazy('erp:category_list')

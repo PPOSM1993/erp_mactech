@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from core.erp.mixins import IsSuperUserMixin
 from core.erp.models import *
 from django.views.generic import *
 from django.utils.decorators import method_decorator
@@ -11,7 +12,7 @@ from core.erp.forms import ReplacementForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class ReplacementListView(LoginRequiredMixin, ListView):
+class ReplacementListView(IsSuperUserMixin, LoginRequiredMixin, ListView):
     model = Replacement 
     template_name = "replacement/list.html"
     

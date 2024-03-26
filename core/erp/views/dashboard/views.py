@@ -19,5 +19,6 @@ class DashboardView(TemplateView):
         context['panel'] = 'Panel de administrador'
         context['category'] = Category.objects.all().count()
         context['replacement'] = Replacement.objects.all().count()
+        context['client'] = Clients.objects.all().count()
         #context['graph_sales_year_month'] = self.get_graph_sales_year_month()
         return context

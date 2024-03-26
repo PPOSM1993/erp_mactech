@@ -5,3 +5,5 @@ from .models import *
 
 admin.site.register(Category)
 admin.site.register(Replacement)
+admin.site.register(Clients)
+admin.site.register(Brand)
