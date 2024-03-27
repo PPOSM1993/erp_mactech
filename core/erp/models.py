@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.forms import model_to_dict
 # Create your models here.
@@ -37,6 +38,9 @@ class Replacement(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True, null=True, blank=False)
     cat = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Categoría')
     stock = models.IntegerField(default=0, verbose_name='Stock')
+    precio_compra = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Compra')
+    #procentaje = models.DecimalField(default=1.4, max_digits=9, decimal_places=2, verbose_name='Porcentaje')
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Final')
     location = models.CharField(max_length=150, verbose_name='Ubicación', null=True, blank=True)
     
     def __str__(self):
@@ -54,6 +58,7 @@ class Replacement(models.Model):
     def toJSON(self):
         item = model_to_dict(self)
         item['cat'] = self.cat.toJSON()
+        item['pvp'] = format(self.pvp, '.2f')
         return item
 
     class Meta:
@@ -111,4 +116,31 @@ class Brand(models.Model):
     class Meta:
         verbose_name = 'Marca'
         verbose_name_plural = 'Marcas'
+        ordering = ['id']
+
+
+class Sale(models.Model):
+    cli = models.ForeignKey(Clients, on_delete=models.PROTECT, verbose_name='Cliente')
+    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha Venta')
+    subtotal = models.DecimalField(
+        default=0.00, max_digits=9, decimal_places=2)
+    iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+
+    def __str__(self):
+        return self.cli.names
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cli'] = self.cli.toJSON()
+        item['subtotal'] = format(self.subtotal, '.2f')
+        item['iva'] = format(self.iva, '.2f')
+        item['total'] = format(self.total, '.2f')
+        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
+        item['det'] = [i.toJSON() for i in self.detsale_set.all()]
+        return item
+
+    class Meta:
+        verbose_name = 'Venta'
+        verbose_name_plural = 'Ventas'
         ordering = ['id']

@@ -17,8 +17,8 @@ $(function () {
             {"data": "code_replacement"},
             {"data": "name"},
             {"data": "cat.name"},
-            {"data": "location"},
-            {"data": "stock"},
+            //{"data": "location"},
+            //{"data": "stock"},
             {"data": "stock"},
         ],
         columnDefs: [

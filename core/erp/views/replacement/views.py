@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from core.erp.mixins import IsSuperUserMixin
+from core.erp.mixins import IsSuperUserMixin, ValidatePermissionRequiredMixin
 from core.erp.models import *
 from django.views.generic import *
 from django.utils.decorators import method_decorator
@@ -12,9 +12,10 @@ from core.erp.forms import ReplacementForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class ReplacementListView(IsSuperUserMixin, LoginRequiredMixin, ListView):
+class ReplacementListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Replacement 
     template_name = "replacement/list.html"
+    permission_required = 'erp.view_replacement'
     
     
     @method_decorator(csrf_exempt)
@@ -48,11 +49,13 @@ class ReplacementListView(IsSuperUserMixin, LoginRequiredMixin, ListView):
         context['entity'] = 'Repuestos'
         return context
 
-class ReplacementCreateView(CreateView):
+class ReplacementCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = Replacement
     form_class = ReplacementForm
-    template_name = "replacement/create.html"
+    template_name = 'replacement/create.html'
     success_url = reverse_lazy('erp:replacement_list')
+    permission_required = 'erp.add_replacement'
+    url_redirect = success_url
 
     @method_decorator(csrf_exempt)
     @method_decorator(login_required)
@@ -80,12 +83,14 @@ class ReplacementCreateView(CreateView):
         context['action'] = 'add'
         return context
 
-class ReplacementUpdateView(UpdateView):
+class ReplacementUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     
     model = Replacement
     form_class = ReplacementForm
-    template_name = "replacement/create.html"
+    template_name = 'replacement/create.html'
     success_url = reverse_lazy('erp:replacement_list')
+    permission_required = 'erp.change_replacement'
+    url_redirect = success_url
     
 
     @method_decorator(csrf_exempt)
@@ -115,10 +120,12 @@ class ReplacementUpdateView(UpdateView):
         context['action'] = 'edit'
         return context
 
-class ReplacementDeleteView(DeleteView):
+class ReplacementDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = Replacement
     template_name = "replacement/delete.html"
     success_url = reverse_lazy('erp:replacement_list')
+    permission_required = 'erp.delete_replacement'
+    url_redirect = success_url
     
     @method_decorator(csrf_exempt)
     @method_decorator(login_required)
