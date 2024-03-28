@@ -37,9 +37,8 @@ class Replacement(models.Model):
     code_replacement = models.CharField(max_length=150, verbose_name='Código', unique=True, null=True, blank=False)
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True, null=True, blank=False)
     cat = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Categoría')
-    stock = models.IntegerField(default=0, verbose_name='Stock')
-    precio_compra = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Compra')
-    #procentaje = models.DecimalField(default=1.4, max_digits=9, decimal_places=2, verbose_name='Porcentaje')
+    stock = models.CharField(default=0, verbose_name='Stock')
+    #precio_compra = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Compra')
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Final')
     location = models.CharField(max_length=150, verbose_name='Ubicación', null=True, blank=True)
     

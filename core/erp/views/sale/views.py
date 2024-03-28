@@ -27,14 +27,24 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         data = {}
         try:
             action = request.POST['action']
-            if action == 'add':
-                form = self.get_form()
-                data = form.save()
+            if action == 'search_replacement':
+                data = []
+                replacement = Replacement.objects.filter( name__icontains=request.POST['term'])[0:10]
+                for i in replacement:
+                    item = i.toJSON()
+                    #item['value'] = i.code_replacement
+                    item['value'] = i.name + " - " + i.code_replacement
+                    
+                    data.append(item)
+                    
+            #if action == 'add':
+            #    form = self.get_form()
+            #    data = form.save()
             else:
                 data['error'] = "No ha ingresado a un ninguna opción"
         except Exception as e:
             data['error'] = str(e)
-        return JsonResponse(data)
+        return JsonResponse(data, safe=False)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

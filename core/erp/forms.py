@@ -77,30 +77,23 @@ class ReplacementForm(ModelForm):
                 }
             ),
             
-            'precio_compra': TextInput(
+            """'precio_compra': TextInput(
                 attrs={
                     'placeholder': '',
                     "type": "number",
                     'class': 'form-control form-control-md'
                 }
-            ),
-            
-            """'procentaje': TextInput(
-                attrs={
-                    'placeholder': '',
-                    "type": "number",
-                    'class': 'form-control form-control-md',
-                    'readonly': True
-                }
             ),"""
+        
             
             'location': TextInput(
                 attrs={
                     'placeholder': 'Ubicación',
                     "type": "text",
-                    'class': 'form-control form-control-sm'
+                    'class': 'form-control form-control-sm',
                 }
             )
+            
             
                         
         }
