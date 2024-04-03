@@ -79,7 +79,7 @@ class ClientCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Crea
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación Clients'
+        context['title'] = 'Creación Cliente'
         context['entity'] = 'Clientes'
         context['list_url'] = self.success_url
         context['action'] = 'add'

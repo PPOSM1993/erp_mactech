@@ -12,7 +12,7 @@ from core.erp.forms import ReplacementForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class ReplacementListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
+class ReplacementListView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermissionRequiredMixin, ListView):
     model = Replacement 
     template_name = "replacement/list.html"
     permission_required = 'erp.view_replacement'

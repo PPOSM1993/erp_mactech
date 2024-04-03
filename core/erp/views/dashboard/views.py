@@ -21,5 +21,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['category'] = Category.objects.all().count()
         context['replacement'] = Replacement.objects.all().count()
         context['client'] = Clients.objects.all().count()
+        context['money'] = Money.objects.all().count()
+        context['pay_method'] = PayMethods.objects.all().count()
+        context['cotizacion'] = Cotizacion.objects.all().count()
         #context['graph_sales_year_month'] = self.get_graph_sales_year_month()
         return context

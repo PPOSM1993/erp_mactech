@@ -1,14 +1,12 @@
 from django.urls import path
-
 from core.erp.views.category.views import *
-
 from core.erp.views.replacement.views import *
-
 from core.erp.views.client.views import *
-
 from core.erp.views.dashboard.views import DashboardView
-
 from core.erp.views.sale.views import *
+from core.erp.views.pay_methods.views import *
+from core.erp.views.cotizacion.views import *
+from core.erp.views.money.views import *
 
 
 app_name = 'erp'
@@ -35,5 +33,22 @@ urlpatterns = [
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name="client_delete"),
     
     #Sale
-    path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
+    #path('sale/list/', SaleListView.as_view(), name="sale_list"),
+    #path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
+    #path('sale/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale_delete'),
+    
+    #Pay Methods
+    path('pay_methods/list/', PayMethodListView.as_view(), name="pay_methods_list"),
+    path('pay_methods/add/', PayMethodsCreateView.as_view(), name="pay_methods_create"),
+    path('pay_methods/update/<int:pk>/', PayMethodsUpdateView.as_view(), name="pay_methods_update"),
+    path('pay_methods/delete/<int:pk>/', PayMethodsDeleteView.as_view(), name="pay_methods_delete"),
+    
+    #Cotizaciones
+    path('cotizacion/list', CotizacionListView.as_view(), name="cotizacion_list"),
+    path('cotizacion/add/', CotizacionCreateView.as_view(), name='cotizacion_create'),
+    
+    #Money
+    path('money/list', MoneyListView.as_view(), name="money_list"),
+    path('money/add/', MoneyCreateView.as_view(), name="money_create"),
+
 ]

@@ -23,6 +23,7 @@
               <a href="{% url 'erp:category_list' %}" class="small-box-footer">Más Información<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+
           <div class="col-lg-4">
             <!-- small box -->
             <div class="small-box bg-danger">
@@ -48,6 +49,48 @@
                 <i class="nav-icon fas fa-users"></i>
               </div>
               <a href="{% url 'erp:replacement_list' %}" class="small-box-footer">Más Información<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <!-- small box -->
+            <div class="small-box bg-primary">
+              <div class="inner">
+                <h3>{{ pay_method }}</h3>
+                <p>Medio de Pago</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-credit-card"></i>
+              </div>
+              <a href="{% url 'erp:pay_methods_list' %}" class="small-box-footer">Más Información<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>{{ money }}</h3>
+                <p>Tipo Moneda</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <a href="{% url 'erp:money_list' %}" class="small-box-footer">Más Información<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <!-- small box -->
+            <div class="small-box bg-light">
+              <div class="inner">
+                <h3>{{ cotizacion }}</h3>
+                <p>Cotizaciones</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-file"></i>
+              </div>
+              <a href="{% url 'erp:cotizacion_list' %}" class="small-box-footer">Más Información<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>

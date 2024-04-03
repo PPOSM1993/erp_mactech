@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     $('#data').DataTable({
         responsive: true,
         autoWidth: false,
@@ -26,13 +26,13 @@ $(function() {
             targets: [-1],
             class: 'text-center',
             orderable: false,
-            render: function(data, type, row) {
+            render: function (data, type, row) {
                 var buttons = '<a href="/erp/client/update/' + row.id + '/" class="btn btn-warning btn-sm btn-flat"><i class="fas fa-edit"></i></a> ';
                 buttons += '<a href="/erp/client/delete/' + row.id + '/" type="button" class="btn btn-danger btn-sm btn-flat"><i class="fas fa-trash-alt"></i></a>';
                 return buttons;
             }
-        }, ],
-        initComplete: function(settings, json) {
+        },],
+        initComplete: function (settings, json) {
 
         }
     });

@@ -44,8 +44,8 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="card card-secondary">
-              <div class="card-header" style="background-color: #E95C4A;">
-                <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle Venta</h3>
+              <div class="card-header" style="background-color: #FFFFFF;">
+                <h3 class="card-title" style="color:black;"><i class="fas fa-boxes"></i> Detalle</h3>
               </div>
 
               <div class="card-body">
@@ -54,7 +54,7 @@
 
                   <div class="input-group">
                     <input type="text" name="search" class="form-control form-control-md" placeholder="Ingrese Repuesto" autocomplete="off" />
-
+                    <button type="button" class="btn btn-danger btn-flat btnClearSearch"><i class="fas fa-times"></i></button>
                     <!-- <select name="search" class="form-control select2 form-control-sm" style="width: 70%;" id=""></select> -->
                     <!-- <button class="btn btn-success btn-sm btn-flat dropdown-toggle">Opciones</button> -->
                     <!-- type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" -->
@@ -85,11 +85,12 @@
 
           <div class="col-lg-4">
             <div class="card card-secondary">
-              <div class="card-header" style="background-color: #E95C4A;">
-                <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos Factura</h3>
+              <div class="card-header" style="background-color: #FFFFFF;">
+                <h3 class="card-title" style="color: black;"><i class="fas fa-shopping-cart"></i> Datos Cliente</h3>
               </div>
 
               <div class="card-body">
+                <input type="hidden" name="action" value="{{ action }}" />
                 <div class="form-group">
                   <label for="">Fecha Venta</label>
                   {{ form.date_joined }}
@@ -97,30 +98,34 @@
 
                 <div class="form-group">
                   <label>Cliente:</label>
-                  <div class="input-group">
-                    {{ form.cli }}
-                    <div class="input-group-append">
-                      <button class="btn btn-success btn-flat btnAddClient" type="button"><i class="fas fa-user-plus"></i></button>
-                    </div>
-                  </div>
+                  {{ form.cli }}
                 </div>
 
                 <div class="form-group">
-                  <label>Subtotal:</label> {{ form.subtotal }}
+                  <label>Medio de Pago:</label> {{ form.pay_method }}
                 </div>
 
                 <div class="form-group">
-                  <label>IVA:</label> {{ form.iva }}
+                  <label>Tipo de Moneda:</label> {{ form.money }}
                 </div>
 
                 <div class="form-group">
-                  <label>IVA Calculado:</label>
+                  <label>Total Neto:</label> {{ form.subtotal }}
+                </div>
+
+                <div class="form-group">
+                  <label>Porcentaje IVA</label> {{ form.iva }}
+                </div>
+
+                <div class="form-group">
+                  <label>IVA</label>
                   <input type="text" class="form-control form-control-md" readonly name="ivacalc" value="0.00" />
                 </div>
 
                 <div class="form-group">
-                  <label>Total a pagar:</label> {{ form.total }}
+                  <label>Total:</label> {{ form.total }}
                 </div>
+                
               </div>
             </div>
           </div>
@@ -130,7 +135,7 @@
       <div class="card-footer">
         <button type="submit" class="btn btn-success btn-flat"><i class="fas fa-save"></i> Guardar registro</button>
 
-        <a href="" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
+        <a href="{{ list_url }}" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
       </div>
     </div>
   </form>

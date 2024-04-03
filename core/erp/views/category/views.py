@@ -12,7 +12,7 @@ from core.erp.forms import CategoryForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class CategoryListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
+class CategoryListView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermissionRequiredMixin, ListView):
     model = Category 
     template_name = "category/list.html"
     permission_required = 'erp.view_category'

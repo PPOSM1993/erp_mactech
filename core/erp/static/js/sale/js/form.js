@@ -2,6 +2,7 @@ var tblReplacement;
 var vents = {
     items: {
         'cli': '',
+        'pay_method': '',
         'date_joined': '',
         'subtotal': 0.00,
         'iva': 0.00,
@@ -50,7 +51,7 @@ var vents = {
                 { "data": "name" },
                 { "data": "code_replacement" },
                 { "data": "pvp" },
-                { "data": "stock" },
+                { "data": "cant" },
                 { "data": "subtotal" }
             ],
             columnDefs: [
@@ -203,4 +204,31 @@ $(function () {
             vents.calculate_invoice();
             $('td:eq(5)', tblReplacement.row(tr.row).node()).html('$' + vents.items.replacement[tr.row].subtotal.toFixed(2));
         });
+
+
+    $('.btnClearSearch').on('click', function () {
+        $('input[name="search"]').val('').focus();
+    });
+
+    //event submit
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+
+        if (vents.items.replacement.length === 0) {
+            message_error('Debe al menos tener un item en su detalle de venta');
+            return false;
+        }
+
+        vents.items.date_joined = $('input[name="date_joined"]').val();
+        vents.items.cli = $('select[name="cli"]').val();
+        vents.items.pay_method = $('select[name="pay_method"]').val();
+        var parameters = new FormData();
+        parameters.append('action', $('input[name="action"]').val());
+        parameters.append('vents', JSON.stringify(vents.items));
+        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+            location.href = '/erp/dashboard/';
+        });
+    });
+
+    vents.list();
 });

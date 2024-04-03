@@ -1,0 +1,25 @@
+{% extends 'list.html' %} {% load static %} {% block head_list %}
+  <script src="{% static 'js/cotizacion/list.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+  Ventas
+{% endblock %}
+
+{% block columns %}
+  <tr>
+    <th scope="col">REGISTRO</th>
+    <th scope="col">CLIENTE</th>
+    <th scope="col">FECHA COTIZACIÓN</th>
+    <th scope="col">TOTAL</th>
+    <th scope="col">OPCIONES</th>
+  </tr>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

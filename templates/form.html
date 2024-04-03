@@ -2,17 +2,17 @@
 {% load widget_tweaks %}
 
 {% block head %}
-    {% block head_form %}
+  {% block head_form %}
 
-    {% endblock %}
+  {% endblock %}
 {% endblock %}
 
 {% load static %}
 {% block content %}
   <form method="post" action=".">
     <div class="card card-default">
-      <div class="card-header" style="background-color: #E95C4A;">
-        <h3 class="card-title text-white">
+      <div class="card-header">
+        <h3 class="card-title text-black">
           {% if action == 'add' %}
             <i class="fas fa-plus"></i>
           {% else %}

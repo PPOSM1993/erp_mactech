@@ -180,17 +180,92 @@ class ClientsForm(ModelForm):
             data['error'] = str(e)
         return data
 
-class SaleForm(ModelForm):
+class PayMethodsForm(ModelForm):
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['cli'].queryset = Clients.objects.none()
         
+        self.fields['name'].widget.attrs['autofocus'] = True
+    
     class Meta:
-        model = Sale
+        model = PayMethods
+        fields = '__all__'
+        widgets = {
+            'name': TextInput(
+                attrs={
+                    'placeholder': 'Medio de Pago',
+                    'class': 'form-control form-control-sm',
+                    'autofocus': True
+                }
+            )
+        }
+        
+        exclude = ['user_updated', 'user_creation']
+        
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+class MoneyForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.fields['name'].widget.attrs['autofocus'] = True
+    
+    class Meta:
+        model = Money
+        fields = '__all__'
+        widgets = {
+            'name': TextInput(
+                attrs={
+                    'placeholder': 'Nombre Moneda ($)',
+                    'class': 'form-control form-control-sm',
+                    'autofocus': True
+                }
+            )
+        }
+        
+        exclude = ['user_updated', 'user_creation']
+        
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+
+class CotizacionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.visible_fields():
+            form.field.widget.attrs['class'] = 'form-control'
+            form.field.widget.attrs['select'] = 'off'
+        self.fields['cli'].widget.attrs['class'] = 'form-control select2'
+        self.fields['money'].widget.attrs['class'] = 'form-control select2'
+        self.fields['pay_method'].widget.attrs['class'] = 'form-control select2'
+
+    class Meta:
+        model = Cotizacion
         fields = '__all__'
         widgets = {
             'cli': Select(attrs={
-                'class': 'form-control-md select2'
+                'class': 'form-control select2',
+                'style': 'width: 100%'
             }),
             'date_joined': DateInput(
                 format='%Y-%m-%d',
@@ -211,6 +286,14 @@ class SaleForm(ModelForm):
             'subtotal': TextInput(attrs={
                 'readonly': True,
                 'class': 'form-control form-control-md',
+            }),
+            'pay_method': Select(attrs={
+                'class': 'form-control select2',
+                'style': 'width: 100%'
+            }),
+            'money': Select(attrs={
+                'class': 'form-control select2',
+                'style': 'width: 100%'
             }),
             'total': TextInput(attrs={
                 'readonly': True,
