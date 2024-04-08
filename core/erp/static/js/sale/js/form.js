@@ -6,6 +6,8 @@ var vents = {
         'date_joined': '',
         'subtotal': 0.00,
         'iva': 0.00,
+        'pay_method': '',
+        'money': '',
         'total': 0.00,
         'replacement': []
     },

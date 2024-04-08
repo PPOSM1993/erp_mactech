@@ -74,7 +74,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         data = {}
         try:
             action = request.POST['action']
-            if action == 'search_replacement':
+            if action == 'search_replacements':
                 data = []
                 replacement = Replacement.objects.filter(name__icontains=request.POST['term'])[0:10]
                 for i in replacement:
@@ -100,7 +100,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                         det.sale_id = sale.id
                         det.replacement_id = i['id']
                         det.pay_method_id = i['id']
-                        det.stock = int(i['stock'])
+                        det.cant = int(i['cant'])
                         det.price = float(i['pvp'])
                         det.cant = int(i['cant'])
                         det.subtotal = float(i['subtotal'])

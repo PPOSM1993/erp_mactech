@@ -46,6 +46,8 @@ urlpatterns = [
     #Cotizaciones
     path('cotizacion/list', CotizacionListView.as_view(), name="cotizacion_list"),
     path('cotizacion/add/', CotizacionCreateView.as_view(), name='cotizacion_create'),
+    path('cotizacion/update/<int:pk>/', CotizacionUpdateView.as_view(), name='cotizacion_update'),
+    path('cotizacion/delete/<int:pk>/', CotizacionDeleteView.as_view(), name="cotizacion_delete"),
     
     #Money
     path('money/list', MoneyListView.as_view(), name="money_list"),

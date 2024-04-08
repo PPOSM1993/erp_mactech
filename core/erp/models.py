@@ -39,7 +39,7 @@ class Replacement(models.Model):
     code_replacement = models.CharField(max_length=150, verbose_name='Código', unique=True, null=True, blank=False)
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True, null=True, blank=False)
     cat = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Categoría')
-    cant = models.IntegerField(default=0, verbose_name='Stock')
+    stock = models.IntegerField(default=0, verbose_name='Stock')
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Final')
     location = models.CharField(max_length=150, verbose_name='Ubicación', null=True, blank=True)
     
@@ -204,10 +204,10 @@ class Cotizacion(models.Model):
 
 class DetCotizacion(models.Model):
     
-    sale = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, verbose_name='Venta')
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, verbose_name='Venta')
     repl = models.ForeignKey(Replacement, on_delete=models.CASCADE, verbose_name='Repuesto(s)')
     price = models.DecimalField(default=0.00, max_digits=9, decimal_places=0, verbose_name='Precio')
-    cant = models.IntegerField(default=0, verbose_name='Stock')
+    stock = models.IntegerField(default=0, verbose_name='Stock')
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
