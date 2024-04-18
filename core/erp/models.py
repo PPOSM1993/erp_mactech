@@ -37,7 +37,7 @@ class Category(BaseModel):
 class Replacement(models.Model):
     
     code_replacement = models.CharField(max_length=150, verbose_name='Código', unique=True, null=True, blank=False)
-    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True, null=True, blank=False)
+    name = models.CharField(max_length=150, verbose_name='Nombre', unique=False, null=True, blank=False)
     cat = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Categoría')
     stock = models.IntegerField(default=0, verbose_name='Stock')
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio Final')
@@ -145,6 +145,32 @@ class Brand(models.Model):
         ordering = ['id']
 
 
+class PlazoEntrega(models.Model):
+    
+    name = models.CharField(max_length=150, verbose_name='Plazo Entrega', unique=True, null=False, blank=False)
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        user = get_current_user()
+        if user is not None:
+            if not self.pk:
+                self.user_creation = user
+            else:
+                self.user_updated = user
+        super(Category, self).save()
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        return item
+
+    class Meta:
+        verbose_name = 'Plazo Entrega'
+        verbose_name_plural = 'Plazos Entrega'
+        ordering = ['id']
+
+
 class PayMethods(models.Model):
     name = models.CharField(max_length=150, verbose_name='Método de Pago', unique=True, null=False, blank=False)
 
@@ -168,6 +194,37 @@ class PayMethods(models.Model):
     class Meta:
         verbose_name = 'Metodo de Pago'
         verbose_name_plural = 'Metodos de Pago'
+        ordering = ['id']
+
+
+class Sale(models.Model):
+    cli = models.ForeignKey(Clients, on_delete=models.PROTECT, verbose_name='Cliente')
+    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha Venta')
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    pay_method = models.ForeignKey(PayMethods, on_delete=models.PROTECT, verbose_name='Método de Pago')
+    money = models.ForeignKey(Money, on_delete=models.PROTECT, verbose_name='Moneda')
+
+
+    def __str__(self):
+        return self.cli.names
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cli'] = self.cli.toJSON()
+        item['pay_method'] = self.pay_method.toJSON()
+        item['money'] = self.money.toJSON()
+        item['subtotal'] = format(self.subtotal, '.2f')
+        item['iva'] = format(self.iva, '.2f')
+        item['total'] = format(self.total, '.2f')
+        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
+        item['det'] = [i.toJSON() for i in self.detcotizacion_set.all()]
+        return item
+
+    class Meta:
+        verbose_name = 'Cotización'
+        verbose_name_plural = 'Cotizaciones'
         ordering = ['id']
 
 

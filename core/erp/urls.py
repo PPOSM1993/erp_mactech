@@ -34,7 +34,7 @@ urlpatterns = [
     
     #Sale
     #path('sale/list/', SaleListView.as_view(), name="sale_list"),
-    #path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
+    path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
     #path('sale/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale_delete'),
     
     #Pay Methods
@@ -44,10 +44,11 @@ urlpatterns = [
     path('pay_methods/delete/<int:pk>/', PayMethodsDeleteView.as_view(), name="pay_methods_delete"),
     
     #Cotizaciones
-    path('cotizacion/list', CotizacionListView.as_view(), name="cotizacion_list"),
-    path('cotizacion/add/', CotizacionCreateView.as_view(), name='cotizacion_create'),
-    path('cotizacion/update/<int:pk>/', CotizacionUpdateView.as_view(), name='cotizacion_update'),
-    path('cotizacion/delete/<int:pk>/', CotizacionDeleteView.as_view(), name="cotizacion_delete"),
+    #path('cotizacion/list', CotizacionListView.as_view(), name="cotizacion_list"),
+    #path('cotizacion/add/', CotizacionCreateView.as_view(), name='cotizacion_create'),
+    #path('cotizacion/update/<int:pk>/', CotizacionUpdateView.as_view(), name='cotizacion_update'),
+    #path('cotizacion/delete/<int:pk>/', CotizacionDeleteView.as_view(), name="cotizacion_delete"),
+    #path('cotizacion/invoice/pdf/<int:pk>/', CotizacionInvoiceView.as_view(), name="cotizacion_invoice"),
     
     #Money
     path('money/list', MoneyListView.as_view(), name="money_list"),

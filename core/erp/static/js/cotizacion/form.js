@@ -1,5 +1,6 @@
 var tblReplacements;
 
+
 var vents = {
     items: {
         'cli': '',
@@ -12,8 +13,8 @@ var vents = {
         'replacements': []
     },
 
-    add: function (item) {
-        this.items.replacements.push(item);
+    add: function(items) {
+        this.items.replacements.push(items);
         this.list();
     },
 
@@ -21,7 +22,7 @@ var vents = {
         var subtotal = 0.00;
         var iva = $('input[name="iva"]').val();
         $.each(this.items.replacements, function (pos, dict) {
-            dict.subtotal = dict.stock * parseFloat(dict.pvp);
+            dict.subtotal = dict.stock * parseFloat(dict.pvp)  * 1.4;
             dict.pos = pos;
             subtotal += dict.subtotal;
         });
@@ -29,6 +30,7 @@ var vents = {
 
 
         $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2));
+        this.items.subtotal = this.items.subtotal;
         this.items.iva = this.items.subtotal * iva;
         this.items.total = this.items.subtotal + this.items.iva;
         $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2));
@@ -40,7 +42,7 @@ var vents = {
 
     list: function () {
         this.calculate_invoice();
-        tblReplacements =  $('#tblReplacements').DataTable({
+        tblReplacements = $('#tblReplacements').DataTable({
             responsive: true,
             autoWidth: false,
             destroy: true,
@@ -188,8 +190,8 @@ $(function () {
         });
     });
 
-        // event stock
-        $('#tblReplacements tbody')
+    // event stock
+    $('#tblReplacements tbody')
         .on('click', 'a[rel="remove"]', function () {
             var tr = tblReplacements.cell($(this).closest('td, li')).index();
             alert_action('Notificación', '¿Estas seguro de eliminar el producto de tu detalle?', function () {
@@ -212,27 +214,27 @@ $(function () {
     });
 
 
-        //event submit
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-    
-            if (vents.items.replacements.length === 0) {
-                message_error('Debe al menos tener un item en su detalle de venta');
-                return false;
-            }
-    
-            vents.items.date_joined = $('input[name="date_joined"]').val();
-            vents.items.cli = $('select[name="cli"]').val();
-            vents.items.pay_method = $('select[name="pay_method"]').val();
-            vents.items.money = $('select[name="money"]').val();
-            var parameters = new FormData();
-            parameters.append('action', $('input[name="action"]').val());
-            parameters.append('vents', JSON.stringify(vents.items));
-            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-                location.href = '/erp/cotizacion/list';
-            });
-        });
+    //event submit
+    $('form').on('submit', function (e) {
+        e.preventDefault();
 
-        vents.list();
+        if (vents.items.replacements.length === 0) {
+            message_error('Debe al menos tener un item en su detalle de venta');
+            return false;
+        }
+
+        vents.items.date_joined = $('input[name="date_joined"]').val();
+        vents.items.cli = $('select[name="cli"]').val();
+        vents.items.pay_method = $('select[name="pay_method"]').val();
+        vents.items.money = $('select[name="money"]').val();
+        var parameters = new FormData();
+        parameters.append('action', $('input[name="action"]').val());
+        parameters.append('vents', JSON.stringify(vents.items));
+        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+            location.href = '/erp/cotizacion/list';
+        });
+    });
+
+    vents.list();
 
 })

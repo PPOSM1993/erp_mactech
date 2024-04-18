@@ -1,5 +1,6 @@
 import json
 import os
+from re import template
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,13 +13,13 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, View
-#from xhtml2pdf import pisa
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 from core.erp.forms import *
-from core.erp.mixins import ValidatePermissionRequiredMixin,IsSuperUserMixin
+from core.erp.mixins import ValidatePermissionRequiredMixin, IsSuperUserMixin
 from core.erp.models import *
 from django.contrib.auth.decorators import login_required
-
 
 
 class CotizacionListView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermissionRequiredMixin, ListView):
@@ -30,7 +31,6 @@ class CotizacionListView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermissio
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -57,11 +57,6 @@ class CotizacionListView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermissio
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
-
-
-
-
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -137,6 +132,7 @@ class CotizacionCreateView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermiss
         return context
 
 
+
 class CotizacionUpdateView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = Cotizacion
     form_class = CotizacionForm
@@ -148,7 +144,6 @@ class CotizacionUpdateView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermiss
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -164,7 +159,7 @@ class CotizacionUpdateView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermiss
             elif action == 'edit':
                 with transaction.atomic():
                     vents = json.loads(request.POST['vents'])
-                    #cotizacion = Cotizacion()
+                    # cotizacion = Cotizacion()
                     cotizacion = self.get_object()
                     cotizacion.date_joined = vents['date_joined']
                     cotizacion.cli_id = vents['cli']
@@ -189,7 +184,6 @@ class CotizacionUpdateView(LoginRequiredMixin, IsSuperUserMixin, ValidatePermiss
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
-
 
     def get_details_replacement(self):
         data = []
@@ -222,6 +216,7 @@ class CotizacionDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
@@ -240,3 +235,63 @@ class CotizacionDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, 
         context['entity'] = 'Cotizaciones'
         context['list_url'] = self.success_url
         return context
+
+
+class CotizacionInvoiceView(View):
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        # use short variable names
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /static/media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        # convert URIs to absolute system paths
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            template = get_template('cotizacion/invoice.html')
+            context = {
+                'cotizacion': Cotizacion.objects.get(pk=self.kwargs['pk']),
+                'comp': {
+                    'name': 'MAQTEC SPA',
+                    'rut' : '76.831.125-0',
+                    'phone': '9-82026231',
+                    'address': 'LOS COPIHUES 0112, TEMUCO PADRE LAS CASAS',
+                    'email_casa_matriz': 'MARIO.ULLOA@MAQTECCHILE.CL',
+                    'giro': 'SERVICIO TECNICO',
+                    
+                },
+                'icon': '{}{}'.format(settings.STATIC_URL, 'img/LogoMAQTEC2.png')
+            }
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisaStatus = pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback
+            )
+            return response
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('erp:cotizacion_list'))
+
+
+
